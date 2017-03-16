@@ -48,9 +48,9 @@ XML全称[Extensible Markup Language](https://en.wikipedia.org/wiki/XML)，由�
 - 一对opening tag和closing tag定义了一个Element。opening tag和closing tag之间可以加入内容，作为该element的数据，如
 ```<type>Some Content</type>```
  定义了type element，带有数据```Some Content```。值得注意的是element可以嵌套另一个element，如
-```	
+```xml	
 <parent>
-	<child1></child1>
+    <child1></child1>
     <child2>
         <grandchild></grandchild>
     </child>
@@ -67,7 +67,7 @@ XML全称[Extensible Markup Language](https://en.wikipedia.org/wiki/XML)，由�
 
 ### TextView
 
-```
+```xml
 <TextView
  android:id="@+id/title_text_view"
  android:layout_width="wrap_content"
@@ -96,7 +96,7 @@ XML全称[Extensible Markup Language](https://en.wikipedia.org/wiki/XML)，由�
 
 ### ImageView
 
-```
+```xml
 <ImageView
  android:id="@+id/photo_image_view"
  android:layout_width="match_parent"
