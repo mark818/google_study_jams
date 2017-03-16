@@ -48,11 +48,14 @@ XML全称[Extensible Markup Language](https://en.wikipedia.org/wiki/XML)，由�
 - 一对opening tag和closing tag定义了一个Element。opening tag和closing tag之间可以加入内容，作为该element的数据，如
 ```<type>Some Content</type>```
  定义了type element，带有数据```Some Content```。值得注意的是element可以嵌套另一个element，如
-	```	<parent>
-			<child1></child1>
-	    <child2><grandchild></grandchild></child>
-	</parent>
-	    ```
+```	
+<parent>
+	<child1></child1>
+    <child2>
+        <grandchild></grandchild>
+    </child>
+</parent>
+```
 上述代码中parent element嵌套了child1和child2 element，其中child2又嵌套了grandchild element。由于markdown不支持代码段缩进，看起来不够直观。通常每次嵌套会加入4个空格或一个tab作为缩进。如果一个Element没有数据，则称之为empty-element tag，同时可以简写为
 ```<type />```
 
