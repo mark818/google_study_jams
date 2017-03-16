@@ -1,4 +1,4 @@
-#学习笔记：Building Layouts: Part 1
+# 学习笔记：Building Layouts: Part 1
 
 
 ## 关键词
@@ -27,7 +27,6 @@
     > 
     > 骆驼命名法是将复合词和短语中各单词或短语中的缩写大写首字母并不带空格或符号的做法。
 
-***
 
 &nbsp;
 ## View
@@ -64,7 +63,9 @@ XML全称[Extensible Markup Language](https://en.wikipedia.org/wiki/XML)，由�
 这里介绍了很多概念和细节，没有理解没关系，回到TextView和ImageView看看具体例子。
 
 ### TextView
-```<TextView
+
+```
+<TextView
  android:id="@+id/title_text_view"
  android:layout_width="wrap_content"
  android:layout_height="wrap_content"
@@ -72,7 +73,8 @@ XML全称[Extensible Markup Language](https://en.wikipedia.org/wiki/XML)，由�
  android:textAppearance="?android:textAppearanceLarge"
  android:textColor="#4689C8"
  android:textStyle="bold" />
- ```
+```
+
  这个是教程中TextView的定义。tag名字为TextView，定义了7种属性，其中id为View名，layout_width和layout_height定义了View在屏幕上的长宽，text定义在屏幕上显示的内容，textAppearance定义了字体的样式，textColor定义了字体的颜色，textStyle进一步定义字体的样式。
 
 教程中着重介绍了如下几个属性：
@@ -91,13 +93,14 @@ XML全称[Extensible Markup Language](https://en.wikipedia.org/wiki/XML)，由�
 
 ### ImageView
 
-```<ImageView
+```
+<ImageView
  android:id="@+id/photo_image_view"
  android:layout_width="match_parent"
  android:layout_height="match_parent"
  android:scaleType="centerCrop"
  android:src="@drawable/beach" />
- ```
+```
  
 教程中另一个View就是ImageView。顾名思义，ImageView负责在屏幕上渲染图片。语法上和TextView有很多相同之处，具有id, layout_width, layout_height，同时也带来了自己独有的属性：
 
