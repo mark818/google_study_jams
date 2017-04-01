@@ -84,7 +84,23 @@ LinearLayout是一种简单的排列规范，它将包含的子View依次横向�
 
 在我们介绍RelativeLayout之前，教程提到了一个将View均匀分布屏幕的方法：layout_weight。使用layout_weight可以将根据LinearLayout的横/竖orientation忽视子View的layout_width/layout_height，而根据layout_weight来分配屏幕空间。
 
-在应用到ImageView时，其空间将完全取决于layout_weight；而在TextView中，最小面积取决与TextSize，即每个TextSize给予不小于wrap_content的空间，然后根据其layout_weight给予额外的空间。需要注意的是，每个View的空间计算是按xml中出现的顺序计算的，因此如果先出现的View占有了过大的weight，后出现的TextView将无法保证最小的能够显示的TextSize，被直接冲出的屏幕，如下图。
+~~在应用到ImageView时，其空间将完全取决于layout_weight；而在TextView中，最小面积取决与TextSize，即每个TextSize给予不小于wrap_content的空间，然后根据其layout_weight给予额外的空间。需要注意的是，每个View的空间计算是按xml中出现的顺序计算的，因此如果先出现的View占有了过大的weight，后出现的TextView将无法保证最小的能够显示的TextSize，被直接冲出的屏幕，如下图。~~
+
+经过笔记巡视组**crazypudding**大大的指点教育，我之前的理解被证明有误，现修正如下：
+定义了```layout_weight```属性的View先保证自身定义的layout_width/layout_height，然后将整个View中剩余的空间按照layout_weight的比例分给相应的View。大大甚至翻出了安卓的源码，我带上他的解释复制如下：
+
+```java
+/*
+*源码太多，我就截取两行关键的代码，很好理解，childWeight 指子 View 的weight，remainingExcess 指剩余可分配的空间，remainingWeightSum 指 所有weight 值的总和，那么 share 就是这个子 View 应当被分配的剩余空间的大小了
+*/
+final int share = (int) (childWeight * remainingExcess / remainingWeightSum);
+
+/*
+*这也很好理解，childHeight 是子 View 的最终高度，可以看出是我们指定的 height 值加上 share 的大小了
+*/
+childHeight = child.getMeasuredHeight() + share;
+```
+所以ViewGroup中的View的最终大小由定义的大小加上按layout_weight比重分配的剩余空间大小。要注意的是，不当定义的layout_width/layout_height可能会超出屏幕，导致剩余空间位负，share的部分也变成负数，最终View的大小还不如它的定义大小。
 
 ```xml
 <LinearLayout
@@ -122,6 +138,42 @@ LinearLayout是一种简单的排列规范，它将包含的子View依次横向�
 ```
 
 ![image](https://github.com/mark818/google_study_jams/raw/master/1L/1L-3.png)
+
+来自Android Studio预览功能的截图显示ImageView占住了属于它的500dp，即使下面的TextView有绝对优势的layout_weight也不能影响它的布局。而轮到第一个TextView绘图时已没有足够的ViewGroup空间，因此部分内容被挤出了屏幕，此时剩余空间已为负，因此计算后最终高度小于它的定义高度。而第三个TextView已经没有任何位置了。
+
+为了更加清楚的展示这个逻辑，我们现在去掉第一个ImageView，并给第二个TextView一个非常大的layout_height：
+
+```xml
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+    <TextView
+        android:text="You're invited!"
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:textColor="@android:color/white"
+        android:textSize="54sp"
+        android:layout_weight="1000"
+        android:background="#009688" />
+
+    <TextView
+        android:text="Bonfire at the beach"
+        android:layout_width="wrap_content"
+        android:layout_height="500dp"
+        android:textColor="@android:color/white"
+        android:textSize="34sp"
+        android:layout_weight="1"
+        android:background="#009688" />
+
+</LinearLayout>
+```
+
+![image](https://github.com/mark818/google_study_jams/raw/master/1L/1L-5.png)
+
+这次我们看到只有layout_weight为1的TextView占住了绝大部分空间，而layout_weight为1000的TextView却只剩下自己的100dp，没有任何剩余空间可以分配。我们还可以看到第一个TextView的字体都被吃掉了一部分，因为设定的textSize有54sp，无法装进100dp高的TextView里。
 
 ### RelativeLayout
 
@@ -271,7 +323,27 @@ RelativeLayout是一种更加灵活的排列规范，给予使用者在排版上
  
 相信经过上面的详细解释，RelativeLayout的“位置学”一定不再神秘了。不过要注意的是，部分属性之间会相互冲突，比如一个View不能既alignParentTop又alignParentBottom，也不能toLeftOf和toRightOf同一个View，更不能将同一方向（横/竖）的相对位置与centerVertical/centerHoriontal共用。具体的冲突其实用简单推理就可发现。
 
+## Padding vs Margin
+
+Padding和margin都是用来让View摆脱粘连和贴边的属性，但是它们之间也有不同：
+
+Padding是View内部元素（如TextView里的test）距离View边界的距离
+![image](https://github.com/mark818/google_study_jams/raw/master/1L/1L-6.png)
+
+而margin是View与同级其他View或外层ViewGroup/Root边界的距离
+![image](https://github.com/mark818/google_study_jams/raw/master/1L/1L-7.png)
+
 
 ## Kirill Grouchnikov的访谈
 
 1B的最后，讲师再次采访了Google Play的负责人Kirill Grouchnikov，请他介绍Google Play的UI设计是如何应用两种ViewGroup的。值得记住的是Kirill Grouchnikov提到，不要因为功能简单而弃用LinearLayout，在合适的场景下LinearLayout足以完成任务。
+
+# 后记
+
+1. 修正了layout_weight的解释
+
+2. 加入padding vs margin节
+
+非常感谢**crazypudding**大大及时指出我对layout_weight的理解错误，以及对我较真提问的包容。具体内容请看2楼。Study Jam能提供这样的学习氛围实是非常良心。
+
+最后，吐槽一下制作XmlVisualizer的**Google程序猿**，居然没有按照规范渲染XML，生成的界面与Android Studio的不同，导致我的理解错误...
