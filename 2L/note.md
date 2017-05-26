@@ -100,6 +100,7 @@ public static void test(String []args)
 public static void test(String []args) { // 大括号可换行可不换行，按传统不换行
     System.out.println("Hello World");
 }
+```
 
 上述代码实现了test方法，内容为在标准输出中输出```Hello World```并换行。
 
