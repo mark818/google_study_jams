@@ -57,7 +57,7 @@ public static void test(String []args)
 
 > 上述是test方法的签名，它接受一个String数组；返回类型为空，即不返回结果；static表示它是类唯一方法，被所有实例共享；public表示它访问>权限为公开，其他类和包都能访问它。
 
-这章的视频不再把函数签名和实现分开讲解，而是同意成为定义。同时它提供了一个更清晰的图解，我们依次对每部分展开
+这章的视频不再把函数签名和实现分开讲解，而是统一称为定义。同时它提供了一个更清晰的图解，我们依次对每部分展开
 ![image](https://github.com/mark818/google_study_jams/raw/master/3L/3L-1.png)
 
 - Access modifier
