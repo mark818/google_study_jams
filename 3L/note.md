@@ -239,12 +239,12 @@ else {
 
 上述判定和前面的Boolean类型都设计都用到了关系运算符，这些符号都有对应的数学符号，一看就能理解了。
 
-- =   Equal to (note that it is not a single = sign because this is the assignment operator)
-- !=    Not equal to
-- >     Greater than
-- >=   Greater than or equal to
-- <      Less than
-- <=    Less than or equal to
+- =              Equal to (note that it is not a single = sign because this is the assignment operator)
+- !=             Not equal to
+- &gt;           Greater than
+- &gt;=          Greater than or equal to
+- <              Less than
+- <=             Less than or equal to
 
 当等式/不等式成立时，表达式为真，否则为假。
 
